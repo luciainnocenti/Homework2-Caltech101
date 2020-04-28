@@ -90,8 +90,10 @@ class Caltech(VisionDataset):
         list_indexes = []
         for _class_ in self.classes:
             elements = [key for key, val in enumerate(self.items_as_string) if val.startswith(_class_)]
-            first_split = random.sample(range(min(elements), max(elements)), int(len(elements)*percentage) )
-            first_split.sort()
-            second_split = set(elements) - set(first_split)
+            tmp_split1 = random.sample(range(min(elements), max(elements)), int(len(elements)*percentage) )
+            tmp_split1.sort()
+            tmp_split2 = set(elements) - set(first_split)
+            first_split.extend(tmp_split1)
+            second_split.extend(tmp_split2)
         return first_split, second_split
 
