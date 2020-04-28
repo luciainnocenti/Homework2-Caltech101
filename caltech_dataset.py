@@ -40,6 +40,9 @@ class Caltech(VisionDataset):
               items_as_string.append(ln)
               items.append(pil_loader( root + "/101_ObjectCategories/" + ln))
         f.close()
+        
+        self.items = items
+        self.items_as_string = items_as_string
   
 
     def _find_classes(self, dir):
