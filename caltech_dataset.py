@@ -83,3 +83,15 @@ class Caltech(VisionDataset):
         '''
         length = len(self.items)
         return length
+
+    def __getSubsets__(self, percentage):
+        import random
+        percentage = percentage/100
+        list_indexes = []
+        for _class_ in self.classes:
+            elements = [key for key, val in enumerate(self.items_as_string) if val.startswith(_class_)]
+            first_split = random.sample(range(min(elements), max(elements)), int(len(elements)*percentage) )
+            first_split.sort()
+            second_split = set(elements) - set(first_split)
+        return first_split, second_split
+
