@@ -35,6 +35,7 @@ class Caltech(VisionDataset):
         items_as_string = []
         #Generate a list of elements name
         for line in lines:
+            line.rstrip('\n')
             if(line.split("/")[0] != "BACKGROUND_Google") :
               items_as_string.append(line)
               items.append(pil_loader( root + "/101_ObjectCategories/" + line))
