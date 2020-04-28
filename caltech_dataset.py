@@ -21,12 +21,9 @@ class Caltech(VisionDataset):
                            # (split files are called 'train.txt' and 'test.txt')
 
         #Generate a list containing all the classes available in the dataset and a list of index for the classes
-        classes, class_to_idx = self._find_classes(self.root + "/101_ObjectCategories")
+        classes = self._find_classes(self.root + "/101_ObjectCategories")
 
         self.classes = classes
-        self.class_to_idx = class_to_idx
-
-        self.class_to_idx.remove( classes.index('BACKGROUND_Google'))
         self.classes.remove('BACKGROUND_Google') 
 
         #Open and read the file containing all the elements of the split set
@@ -47,8 +44,7 @@ class Caltech(VisionDataset):
     def _find_classes(self, dir):
         classes = [d.name for d in os.scandir(dir) if d.is_dir()]
         classes.sort()
-        class_to_idx = {classes[i]: i for i in range(len(classes))}
-        return classes, class_to_idx
+        return classes
 
     def __getitem__(self, index):
         '''
