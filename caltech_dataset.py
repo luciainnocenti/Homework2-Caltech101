@@ -27,7 +27,7 @@ class Caltech(VisionDataset):
         self.classes.remove('BACKGROUND_Google') 
 
         #Open and read the file containing all the elements of the split set
-        pathsplit = root + split + ".txt"
+        pathsplit = root + "/" + split + ".txt"
         f = open(pathsplit, 'r')
         lines = f.readlines()
 
