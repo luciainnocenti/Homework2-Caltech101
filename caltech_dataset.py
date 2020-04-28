@@ -12,46 +12,12 @@ def pil_loader(path):
     with open(path, 'rb') as f:
         img = Image.open(f)
         return img.convert('RGB')
-
-class Caltech(VisionDataset):
-    def __init__(self, root, split='train', transform=None, target_transform=None):
-        super(Caltech, self).__init__(root, transform=transform, target_transform=target_transform)
-
-        self.split = split # This defines the split you are going to use
-                           # (split files are called 'train.txt' and 'test.txt')
-
-        '''
-        - Here you should implement the logic for reading the splits files and accessing elements
-        - If the RAM size allows it, it is faster to store all data in memory
-        - PyTorch Dataset classes use indexes to read elements
-        - You should provide a way for the __getitem__ method to access the image-label pair
-          through the index
-        - Labels should start from 0, so for Caltech you will have lables 0...100 (excluding the background class) 
-        '''
-
-        #Generate a list containing all the classes available in the dataset and a list of index for the classes
-        classes, class_to_idx = self._find_classes(self.root)
-
-        self.loader = loader
-        self.classes = classes
-        self.class_to_idx = class_to_idx
-
-        self.classes_to_idx.remove( classes.index('BACKGROUND_Google'))
-        self.classes.remove('BACKGROUND_Google') 
-
-        #Open and read the file containing all the elements of the split set
-        pathsplit = root + split + ".txt"
-        f = open(pathsplit, 'r')
-        lines = f.readlines()
-
-        items = []
-        items_as_string = []
-        #Generate a list of elements name
-        for line in Lines:
-            if(line.split("/")[0] != "BACKGROUND_Google") :
-              items_as_string.append(line)
-              items.append(pil_loader( root + "/101_ObjectCategories/" + line))
-        f.close()
+    
+def _find_classes(self, dir):
+    classes = [d.name for d in os.scandir(dir) if d.is_dir()]
+    classes.sort()
+    class_to_idx = {classes[i]: i for i in range(len(classes))}
+    return classes, class_to_idx
 
 def __getitem__(self, index):
         '''
@@ -86,5 +52,36 @@ def __len__(self):
         '''
         length = len(self.items)
         return length
+    
+class Caltech(VisionDataset):
+    def __init__(self, root, split='train', transform=None, target_transform=None):
+        super(Caltech, self).__init__(root, transform=transform, target_transform=target_transform)
+
+        self.split = split # This defines the split you are going to use
+                           # (split files are called 'train.txt' and 'test.txt')
+
+        #Generate a list containing all the classes available in the dataset and a list of index for the classes
+        classes, class_to_idx = self._find_classes(self.root + "/101_ObjectCategories")
+
+        self.loader = loader
+        self.classes = classes
+        self.class_to_idx = class_to_idx
+
+        self.classes_to_idx.remove( classes.index('BACKGROUND_Google'))
+        self.classes.remove('BACKGROUND_Google') 
+
+        #Open and read the file containing all the elements of the split set
+        pathsplit = root + split + ".txt"
+        f = open(pathsplit, 'r')
+        lines = f.readlines()
+
+        items = []
+        items_as_string = []
+        #Generate a list of elements name
+        for line in Lines:
+            if(line.split("/")[0] != "BACKGROUND_Google") :
+              items_as_string.append(line)
+              items.append(pil_loader( root + "/101_ObjectCategories/" + line))
+        f.close()
 
 
