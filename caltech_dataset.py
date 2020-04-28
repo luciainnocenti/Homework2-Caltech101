@@ -23,7 +23,6 @@ class Caltech(VisionDataset):
         #Generate a list containing all the classes available in the dataset and a list of index for the classes
         classes, class_to_idx = self._find_classes(self.root + "/101_ObjectCategories")
 
-        self.loader = loader
         self.classes = classes
         self.class_to_idx = class_to_idx
 
