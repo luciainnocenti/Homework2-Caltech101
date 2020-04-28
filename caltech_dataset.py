@@ -13,46 +13,6 @@ def pil_loader(path):
         img = Image.open(f)
         return img.convert('RGB')
     
-def _find_classes(self, dir):
-    classes = [d.name for d in os.scandir(dir) if d.is_dir()]
-    classes.sort()
-    class_to_idx = {classes[i]: i for i in range(len(classes))}
-    return classes, class_to_idx
-
-def __getitem__(self, index):
-        '''
-        __getitem__ should access an element through its index
-        Args:
-            index (int): Index
-        Returns:
-            tuple: (sample, target) where target is class_index of the target class.
-        '''
-        #Find the string (label + img_name) corrispondent to index passed as input
-        item = self.items_as_string[index]
-        
-        #Divide the item into label (that is the class) and image name
-        label, image_name = item.split("/")  
-
-        #By the index, access directly the img file
-        image = self.items[index]    
-
-        # Applies preprocessing when accessing the image
-        if self.transform is not None:
-            image = self.transform(image)
-
-        #By the label, return the index of the class in the list of all the classes for the dataset
-        target = self.classes.index(label)
-
-        return image, target
-
-def __len__(self):
-        '''
-        The __len__ method returns the length of the dataset
-        It is mandatory, as this is used by several other components
-        '''
-        length = len(self.items)
-        return length
-    
 class Caltech(VisionDataset):
     def __init__(self, root, split='train', transform=None, target_transform=None):
         super(Caltech, self).__init__(root, transform=transform, target_transform=target_transform)
@@ -83,5 +43,44 @@ class Caltech(VisionDataset):
               items_as_string.append(line)
               items.append(pil_loader( root + "/101_ObjectCategories/" + line))
         f.close()
+  
 
+    def _find_classes(self, dir):
+        classes = [d.name for d in os.scandir(dir) if d.is_dir()]
+        classes.sort()
+        class_to_idx = {classes[i]: i for i in range(len(classes))}
+        return classes, class_to_idx
 
+    def __getitem__(self, index):
+        '''
+        __getitem__ should access an element through its index
+        Args:
+            index (int): Index
+        Returns:
+            tuple: (sample, target) where target is class_index of the target class.
+        '''
+        #Find the string (label + img_name) corrispondent to index passed as input
+        item = self.items_as_string[index]
+        
+        #Divide the item into label (that is the class) and image name
+        label, image_name = item.split("/")  
+
+        #By the index, access directly the img file
+        image = self.items[index]    
+
+        # Applies preprocessing when accessing the image
+        if self.transform is not None:
+            image = self.transform(image)
+
+        #By the label, return the index of the class in the list of all the classes for the dataset
+        target = self.classes.index(label)
+
+        return image, target
+
+    def __len__(self):
+        '''
+        The __len__ method returns the length of the dataset
+        It is mandatory, as this is used by several other components
+        '''
+        length = len(self.items)
+        return length
