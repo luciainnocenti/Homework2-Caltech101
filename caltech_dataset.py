@@ -26,7 +26,7 @@ class Caltech(VisionDataset):
         self.classes = classes
         self.class_to_idx = class_to_idx
 
-        self.classes_to_idx.remove( classes.index('BACKGROUND_Google'))
+        self.class_to_idx.remove( classes.index('BACKGROUND_Google'))
         self.classes.remove('BACKGROUND_Google') 
 
         #Open and read the file containing all the elements of the split set
